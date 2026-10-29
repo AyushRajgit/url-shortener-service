@@ -16,12 +16,25 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ShortCodeNotFound.class)
-    public ResponseEntity<ExceptionDTO> handleOriginalUrlNotFound(ShortCodeNotFound shortCodeNotFound, HttpServletRequest request) {
+    @ExceptionHandler(UrlHasExpiredException.class)
+    public ResponseEntity<ExceptionDTO> handleUrlHasExpired(UrlHasExpiredException urlHasExpiredException, HttpServletRequest request) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(
+                HttpStatus.GONE.value(),
+                HttpStatus.GONE.getReasonPhrase(),
+                urlHasExpiredException.getMessage(),
+                request.getRequestURI(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.GONE).body(exceptionDTO);
+    }
+
+    @ExceptionHandler(ShortCodeNotFoundException.class)
+    public ResponseEntity<ExceptionDTO> handleOriginalUrlNotFound(ShortCodeNotFoundException shortCodeNotFoundException, HttpServletRequest request) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
-                shortCodeNotFound.getMessage(),
+                shortCodeNotFoundException.getMessage(),
                 request.getRequestURI(),
                 LocalDateTime.now()
         );

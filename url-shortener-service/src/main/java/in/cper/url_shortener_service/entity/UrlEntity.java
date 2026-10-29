@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.UniqueElements;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter
@@ -23,21 +24,16 @@ public class UrlEntity {
 
     private String originalUrl;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String shortCode;
 
-    private LocalDateTime timestamp;
+    private Instant createdAt;
+
+    private Instant expireAt;
 
     public UrlEntity(String originalUrl, String shortCode) {
         this.originalUrl = originalUrl;
         this.shortCode = shortCode;
     }
 
-    public void prePersist() {
-        timestamp = LocalDateTime.now();
-    }
-
-    public void preUpdate() {
-        timestamp = LocalDateTime.now();
-    }
 }

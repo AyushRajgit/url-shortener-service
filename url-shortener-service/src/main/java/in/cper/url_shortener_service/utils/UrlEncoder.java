@@ -1,20 +1,26 @@
 package in.cper.url_shortener_service.utils;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 
+@Component
 public class UrlEncoder {
 
     @Value("${Encoding.Secret.Key}")
     private String CHARACTERS;
 
     @Value("${Encoding.Short.Code.Length}")
-    private long SHORT_CODE_LENGTH;
+    private int SHORT_CODE_LENGTH;
 
-    private static final SecureRandom RANDOM = new SecureRandom();
+    private SecureRandom RANDOM = new SecureRandom();
 
     public String generateShortCode() {
+        if (CHARACTERS == null || CHARACTERS.isEmpty() || SHORT_CODE_LENGTH <= 0) {
+            throw new IllegalStateException("Invalid short-code configuration");
+        }
+
         StringBuilder shortCode = new StringBuilder();
 
         for (int i = 0; i < SHORT_CODE_LENGTH; i++) {
