@@ -4,6 +4,7 @@ import in.cper.url_shortener_service.dto.UrlRequestDTO;
 import in.cper.url_shortener_service.dto.UrlResponseDTO;
 import in.cper.url_shortener_service.service.UrlCreationService;
 import in.cper.url_shortener_service.service.UrlRedirectionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class UrlController {
     }
 
     @PostMapping("/shortenURL")
-    public ResponseEntity<UrlResponseDTO> shortenURL(@RequestBody UrlRequestDTO requestDTO) {
+    public ResponseEntity<UrlResponseDTO> shortenURL(@Valid @RequestBody UrlRequestDTO requestDTO) {
         UrlResponseDTO response = urlCreationService.shortenUrl(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

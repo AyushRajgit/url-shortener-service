@@ -1,29 +1,50 @@
 package in.cper.url_shortener_service.exception;
 
 import in.cper.url_shortener_service.dto.ExceptionDTO;
+import in.cper.url_shortener_service.dto.ValidationExceptionDTO;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(OriginalUrlNotFound.class)
-    public ResponseEntity<ExceptionDTO> handleOriginalUrlNotFound(OriginalUrlNotFound originalUrlNotFound, HttpServletRequest request) {
+    @ExceptionHandler(ShortCodeNotFound.class)
+    public ResponseEntity<ExceptionDTO> handleOriginalUrlNotFound(ShortCodeNotFound shortCodeNotFound, HttpServletRequest request) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
-                originalUrlNotFound.getMessage(),
+                shortCodeNotFound.getMessage(),
                 request.getRequestURI(),
                 LocalDateTime.now()
         );
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDTO);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationExceptionDTO> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        Map<String,String> listErrorMessage = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach((error)->listErrorMessage.put(error.getField(), error.getDefaultMessage()));
+
+        ValidationExceptionDTO validationExceptionDTO = new ValidationExceptionDTO(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                listErrorMessage,
+                request.getRequestURI(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(validationExceptionDTO);
     }
 
     @ExceptionHandler(RuntimeException.class)

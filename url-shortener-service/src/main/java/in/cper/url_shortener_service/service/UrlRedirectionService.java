@@ -1,7 +1,7 @@
 package in.cper.url_shortener_service.service;
 
 import in.cper.url_shortener_service.entity.UrlEntity;
-import in.cper.url_shortener_service.exception.OriginalUrlNotFound;
+import in.cper.url_shortener_service.exception.ShortCodeNotFound;
 import in.cper.url_shortener_service.repository.UrlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class UrlRedirectionService {
 
     public String fetchURL(String shortCode) {
         UrlEntity urlEntity = urlRepository.findByShortCode(shortCode).orElseThrow(
-                () -> new OriginalUrlNotFound("Original Url not found associated to : " + shortCode)
+                () -> new ShortCodeNotFound("Short code not found : " + shortCode)
         );
 
         String orginalUrl = urlEntity.getOriginalUrl();
