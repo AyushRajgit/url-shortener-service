@@ -42,7 +42,7 @@ public class UrlCreationService {
 
         while (true) {
             shortCode = urlEncoder.generateShortCode();
-            System.out.println(shortCode);
+//            System.out.println(shortCode);
             if (!urlRepository.existsByShortCode(shortCode)) {
                 break;
             }
