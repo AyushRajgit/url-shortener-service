@@ -20,3 +20,5 @@ public class RedisTest {
         );
     }
 }
+
+// Redis Server Start Command : sudo service redis-server start

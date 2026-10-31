@@ -34,7 +34,7 @@ public class UrlController {
     @GetMapping("/redirectURL/{shortCode}")
     public ResponseEntity<UrlResponseDTO> getURL(@PathVariable String shortCode) {
         String originalUrl = urlRedirectionService.fetchURL(shortCode);
-//        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(originalUrl)).build();
-        return ResponseEntity.status(HttpStatus.FOUND).build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(originalUrl)).build();
+//        return ResponseEntity.status(HttpStatus.FOUND).build();
     }
 }

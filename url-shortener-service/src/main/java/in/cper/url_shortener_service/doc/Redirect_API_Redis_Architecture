@@ -1,0 +1,23 @@
+                  Client
+                    |
+                    v
+               Spring Boot
+                    |
+                    v
+             URL Redirection
+                    |
+                    v
+                Redis GET
+                    |
+             +------+------+
+             |             |
+          Cache Hit     Cache Miss
+             |             |
+             v             v
+         Return URL    PostgreSQL
+                           |
+                           v
+                      Redis SET
+                           |
+                           v
+                       Return URL
