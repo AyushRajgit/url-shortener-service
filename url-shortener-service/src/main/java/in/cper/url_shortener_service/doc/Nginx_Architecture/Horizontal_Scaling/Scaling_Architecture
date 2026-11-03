@@ -1,0 +1,21 @@
+                   Client / Postman
+                         |
+                         v
+                   Nginx (:8080)
+                         |
+              +----------+----------+
+              |          |          |
+              v          v          v
+           App-1      App-2      App-3
+              |          |          |
+              +----------+----------+
+                         |
+                 +-------+-------+
+                 |               |
+                 v               v
+             PostgreSQL       Redis
+
+
+url-shortener-service-app-1
+url-shortener-service-app-2
+url-shortener-service-app-3
