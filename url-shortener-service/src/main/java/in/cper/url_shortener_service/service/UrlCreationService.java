@@ -3,6 +3,7 @@ package in.cper.url_shortener_service.service;
 import in.cper.url_shortener_service.dto.UrlRequestDTO;
 import in.cper.url_shortener_service.dto.UrlResponseDTO;
 import in.cper.url_shortener_service.entity.UrlEntity;
+import in.cper.url_shortener_service.event.UrlCreatedEvent;
 import in.cper.url_shortener_service.mapper.Mapper;
 import in.cper.url_shortener_service.repository.UrlRepository;
 import in.cper.url_shortener_service.utils.UrlEncoder;
@@ -27,11 +28,13 @@ public class UrlCreationService {
     private UrlRepository urlRepository;
     private Mapper mapper = new Mapper();
     private UrlEncoder urlEncoder;
+    private UrlEventProducer urlEventProducer;
 
     @Autowired
-    public UrlCreationService(UrlRepository urlRepository, UrlEncoder urlEncoder) {
+    public UrlCreationService(UrlRepository urlRepository, UrlEncoder urlEncoder, UrlEventProducer urlEventProducer) {
         this.urlRepository = urlRepository;
         this.urlEncoder = urlEncoder;
+        this.urlEventProducer = urlEventProducer;
     }
 
     public UrlResponseDTO shortenUrl(UrlRequestDTO request) {
@@ -51,6 +54,9 @@ public class UrlCreationService {
         UrlEntity urlEntity = mapper.mapIntoEntity(originalUrl, shortCode);
         setUpCreationAndExpiry(urlEntity);
         urlRepository.save(urlEntity);
+
+        UrlCreatedEvent urlCreatedEvent = new UrlCreatedEvent(shortCode, "URL_CREATED");
+        urlEventProducer.sendUrlCreatedEvent(urlCreatedEvent);
 
         String shortUrl = urlEncoder.generateShortURL(shortCode, platformUrl);
         UrlResponseDTO urlResponseDTO = mapper.mapIntoUrlResponseDTO(originalUrl, shortCode, shortUrl);
