@@ -7,10 +7,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class UrlEventConsumer {
 
+    private EmailService emailService;
+
+    public UrlEventConsumer(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
     @KafkaListener(topics = "url-events", groupId = "url-event-group")
     public void consume(UrlCreatedEvent event) {
         System.out.println("Event received from Kafka!");
-        System.out.println("Short Code : " + event.shortCode());
-        System.out.println("Event Type : " + event.eventType());
+
+        emailService.sendUrlEmail(event.email(), event.shortUrl(), event.originalUrl());
+
+        System.out.println("Email sent successfully to: " + event.email());
     }
 }

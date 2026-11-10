@@ -1,5 +1,6 @@
 package in.cper.url_shortener_service.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
@@ -12,4 +13,8 @@ public class UrlRequestDTO {
     @NotBlank(message = "Url cannot be null/empty/white-space")
     @URL(message = "Please enter a valid url")
     private String originalUrl;
+
+    @NotBlank(message = "Email cannot be null/empty/white-space")
+    @Email(message = "Enter a valid email")
+    private String email;
 }

@@ -5,9 +5,10 @@ import in.cper.url_shortener_service.entity.UrlEntity;
 
 public class Mapper {
 
-    public UrlEntity mapIntoEntity(String originalUrl, String shortCode) {
+    public UrlEntity mapIntoEntity(String originalUrl, String email, String shortCode) {
         UrlEntity urlEntity = new UrlEntity(
                 originalUrl,
+                email,
                 shortCode
         );
 

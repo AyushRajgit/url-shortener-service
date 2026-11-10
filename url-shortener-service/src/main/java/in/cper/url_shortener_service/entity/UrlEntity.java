@@ -24,6 +24,8 @@ public class UrlEntity {
 
     private String originalUrl;
 
+    private String email;
+
     @Column(unique = true, nullable = false)
     private String shortCode;
 
@@ -31,8 +33,9 @@ public class UrlEntity {
 
     private Instant expireAt;
 
-    public UrlEntity(String originalUrl, String shortCode) {
+    public UrlEntity(String originalUrl, String email, String shortCode) {
         this.originalUrl = originalUrl;
+        this.email = email;
         this.shortCode = shortCode;
     }
 

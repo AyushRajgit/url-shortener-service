@@ -51,15 +51,15 @@ public class UrlCreationService {
             }
         }
 
-        UrlEntity urlEntity = mapper.mapIntoEntity(originalUrl, shortCode);
+        UrlEntity urlEntity = mapper.mapIntoEntity(originalUrl, request.getEmail(), shortCode);
         setUpCreationAndExpiry(urlEntity);
         urlRepository.save(urlEntity);
 
-        UrlCreatedEvent urlCreatedEvent = new UrlCreatedEvent(shortCode, "URL_CREATED");
-        urlEventProducer.sendUrlCreatedEvent(urlCreatedEvent);
-
         String shortUrl = urlEncoder.generateShortURL(shortCode, platformUrl);
         UrlResponseDTO urlResponseDTO = mapper.mapIntoUrlResponseDTO(originalUrl, shortCode, shortUrl);
+
+        UrlCreatedEvent urlCreatedEvent = new UrlCreatedEvent(shortCode, shortUrl, originalUrl, request.getEmail(), "URL_CREATED");
+        urlEventProducer.sendUrlCreatedEvent(urlCreatedEvent);
 
         return urlResponseDTO;
     }
