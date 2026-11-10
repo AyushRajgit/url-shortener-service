@@ -26,8 +26,6 @@ The objective is not just to shorten URLs, but to understand how backend service
 
 ## 🏗️ Architecture
 
-![Scalable URL Shortener System Architecture](url-shortener-service/src/main/java/in/cper/url_shortener_service/doc/FInal High-Scale URL Shortener Architecture.png)
-
 The application follows a containerized, multi-instance architecture.
 
 **Request flow:**
@@ -43,9 +41,7 @@ The application follows a containerized, multi-instance architecture.
 
 ### Architecture Diagram
 
-<!-- Add your architecture diagram here -->
-
-<!-- Example: ![System Architecture](docs/architecture.png) -->
+![Scalable URL Shortener System Architecture](/url-shortener-service/src/main/java/in/cper/url_shortener_service/doc/final-high-scale-url-shortener-architecture.png)
 
 ---
 
