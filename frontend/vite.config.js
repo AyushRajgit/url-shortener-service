@@ -8,17 +8,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true
-      }
-    }
-  },
-  preview: {
-    port: 4173,
-    strictPort: true,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8080',
+        target: env.VITE_API_BASE_URL || 'http://localhost:8080',
         changeOrigin: true
       }
     }
