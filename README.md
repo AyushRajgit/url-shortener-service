@@ -132,7 +132,7 @@ Integrates Apache Kafka to decouple URL creation from email delivery.
 3. The `UrlEventProducer` publishes a `URL_CREATED` event to the Kafka topic `url-events`.
 4. Kafka stores the event for consumption.
 5. The `UrlEventConsumer` listens to the topic using the consumer group `url-event-group`.
-6. The consumer receives the event and invokes `EmailService`.
+6. The consumer receives the event and invokes `EmailService_Local`.
 7. `JavaMailSender` sends an email containing the original URL and generated short URL through Gmail SMTP.
 
 **Key implementation details:**
@@ -211,6 +211,31 @@ GET /api/redirectURL/Ab12Xy9
 * Returns HTTP 302 when the short code is valid.
 * Redirects the client to the original URL.
 * Handles missing and expired short codes appropriately.
+
+## ⚛️ React Frontend
+
+The React app lives in `frontend/` and uses Vite for local development and production builds. Node.js 20.19 or newer is required.
+
+### Run locally
+
+Start the backend services so the API is available at `http://localhost:8080`, then run:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`. Vite proxies `/api` requests to the backend.
+
+### Create a production build
+
+```bash
+cd frontend
+npm run build
+```
+
+The production assets are written to `frontend/dist/`. For deployment, serve that folder and route `/api` requests to Spring Boot on the same public origin.
 
 ---
 
