@@ -218,7 +218,7 @@ The React app lives in `frontend/` and uses Vite for local development and produ
 
 ### Run locally
 
-Start the backend services so the API is available at `http://localhost:8080`, then run:
+Copy `frontend/.env.example` to `frontend/.env` and set `VITE_API_BASE_URL` to your backend origin. The checked-in local example points at the deployed backend. Then run:
 
 ```bash
 cd frontend
@@ -226,7 +226,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`. Vite proxies `/api` requests to the backend.
+Open `http://localhost:5173`. For local development, set `VITE_API_BASE_URL=http://localhost:8080` if you want to use a local backend. The Vite dev proxy also supports relative `/api` requests when the variable is blank.
 
 ### Create a production build
 
@@ -235,7 +235,20 @@ cd frontend
 npm run build
 ```
 
-The production assets are written to `frontend/dist/`. For deployment, serve that folder and route `/api` requests to Spring Boot on the same public origin.
+The production assets are written to `frontend/dist/`. For a separate frontend host, set its build-time `VITE_API_BASE_URL` to the backend origin. Set the backend environment variable `FRONTEND_ORIGINS` to the exact frontend origin (scheme and host, no path; comma-separate multiple origins) so CORS allows the deployed site. The backend defaults to `http://localhost:5173,http://localhost:4173` for local development.
+
+### Deploy on Render
+
+For a Render Static Site, use:
+
+| Setting | Value |
+| --- | --- |
+| Root Directory | `frontend` |
+| Build Command | `npm ci && npm run build` |
+| Publish Directory | `dist` |
+| Environment Variable | `VITE_API_BASE_URL=https://url-shortener-service-1-bu6t.onrender.com` |
+
+After Render gives the frontend its public URL, set `FRONTEND_ORIGINS` on the backend service to that exact origin, such as `https://your-frontend.onrender.com` (no trailing slash). To make backend-generated and emailed short links use the redirect route, set the backend’s `PLATFORM_URL` to `https://url-shortener-service-1-bu6t.onrender.com/api/redirectURL/`.
 
 ---
 

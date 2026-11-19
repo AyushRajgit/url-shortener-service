@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 const STORAGE_KEY = 'plink.recent.v1';
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').trim().replace(/\/+$/, '');
 
 function readRecent() {
   try {
@@ -195,7 +196,7 @@ function App() {
 
     setIsLoading(true);
     try {
-      const response = await fetch('/api/shortenURL', {
+      const response = await fetch(`${API_BASE_URL}/api/shortenURL`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({ originalUrl: originalUrl.trim(), email: email.trim() })
@@ -205,7 +206,7 @@ function App() {
       if (!payload?.shortCode) throw new Error('The service returned an incomplete link. Please try again.');
 
       const entry = {
-        shortUrl: `${window.location.origin}/api/redirectURL/${encodeURIComponent(payload.shortCode)}`,
+        shortUrl: `${API_BASE_URL || window.location.origin}/api/redirectURL/${encodeURIComponent(payload.shortCode)}`,
         originalUrl: payload.originalUrl || originalUrl.trim(),
         shortCode: payload.shortCode,
         createdAt: new Date().toISOString()
